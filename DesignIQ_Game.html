@@ -1,0 +1,478 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DesignIQ — Creative Skills Arena</title>
+<style>
+:root{
+ --bg:#080b19;--card:#12182d;--line:#303b60;
+ --purple:#9865ff;--pink:#f15bcb;--cyan:#48e3f5;
+ --gold:#ffd166;--green:#3be8a6;--text:#f6f5ff;--muted:#a7b0cd;
+}
+*{box-sizing:border-box}
+body{
+ margin:0;color:var(--text);font-family:Inter,system-ui,Arial,sans-serif;
+ background:radial-gradient(ellipse at 10% 0%,#362052 0,transparent 35%),
+ radial-gradient(ellipse at 100% 35%,#10394a 0,transparent 30%),var(--bg);
+ min-height:100vh
+}
+button,input{font:inherit}
+button{cursor:pointer;transition:.2s}
+button:hover{filter:brightness(1.14);transform:translateY(-2px)}
+button:disabled{opacity:.5;cursor:default;transform:none}
+button:focus-visible,input:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
+.container{max-width:1120px;margin:auto;padding:20px}
+nav{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{font-size:25px;font-weight:950;letter-spacing:-1px}
+.brand span{color:var(--gold)}
+.brand small{display:block;color:var(--muted);font-size:9px;letter-spacing:3px}
+.nav-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.pill,.secondary{
+ border:1px solid var(--line);background:#ffffff08;color:white;
+ border-radius:12px;padding:10px 13px
+}
+.pill{border-radius:30px;font-size:12px;color:var(--gold)}
+.screen{display:none}
+.screen.active{display:block;animation:appear .3s ease}
+@keyframes appear{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.hero{display:grid;grid-template-columns:1.15fr .85fr;gap:25px;align-items:center;padding:45px 0 25px}
+.eyebrow{font-size:11px;color:var(--cyan);font-weight:850;letter-spacing:2px}
+h1{font-size:clamp(37px,6vw,65px);line-height:1.03;letter-spacing:-2px;margin:15px 0}
+.gradient{background:linear-gradient(90deg,#c0a4ff,#f477d4,#62e8f4);background-clip:text;color:transparent}
+p{color:var(--muted);line-height:1.7}
+.primary{border:0;border-radius:13px;padding:13px 19px;color:white;font-weight:850;background:linear-gradient(110deg,#8b5cf6,#e84fc8);box-shadow:0 8px 25px #9b5cff35}
+.gold{background:linear-gradient(110deg,#ffdb75,#ffad34);color:#271400}
+.art{min-height:250px;border:1px solid #51447c;border-radius:24px;background:linear-gradient(145deg,#28204b,#111a31);display:grid;place-items:center;position:relative;overflow:hidden}
+.art:before{content:"";position:absolute;width:180px;height:180px;border-radius:50%;background:#a855f6;filter:blur(70px)}
+.orbit{width:170px;height:170px;border:1px solid #a995ff88;border-radius:50%;display:grid;place-items:center;position:relative}
+.orbit:before,.orbit:after{content:"";position:absolute;width:215px;height:70px;border:1px solid #8ce9ff70;border-radius:50%;transform:rotate(55deg)}
+.orbit:after{transform:rotate(-55deg)}
+.gem{width:100px;height:100px;border-radius:27px;display:grid;place-items:center;font-size:60px;background:linear-gradient(135deg,#9b6cff,#f05bc8,#ffca55);box-shadow:0 0 45px #bb65ff66;z-index:1;animation:float 2.5s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-12px) rotate(8deg)}}
+.stats,.dashboard-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:15px 0 28px}
+.stat,.mini-stat{padding:15px;border:1px solid var(--line);background:#ffffff06;border-radius:15px}
+.stat strong,.mini-stat strong{display:block;font-size:23px}
+.stat small,.mini-stat small{color:var(--muted);font-size:11px}
+.dashboard{padding:19px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(130deg,#171b38,#10172b);margin:18px 0}
+.profile-row{display:flex;align-items:center;gap:12px;padding-bottom:16px;border-bottom:1px solid #ffffff16}
+.avatar{width:56px;height:56px;flex-shrink:0;display:grid;place-items:center;border-radius:50%;font-size:31px;background:linear-gradient(135deg,#8b5cf6,#ec4899);border:2px solid #c4b5fd}
+.profile-row h3{margin:0}.profile-row p{margin:4px 0;font-size:12px}
+.profile-row .secondary{margin-left:auto}
+.mascot-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:20px 0}
+.mascot{font-size:47px;animation:float 2.4s ease-in-out infinite;filter:drop-shadow(0 0 12px #a78bfa55)}
+.mascot:nth-last-child(1){animation-delay:-1.1s}
+h2{letter-spacing:-.5px}
+.section-title{margin:30px 0 6px}
+.categories{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}
+.category{position:relative;min-height:145px;text-align:left;color:white;padding:17px;border-radius:17px;border:1px solid var(--line);background:#ffffff07}
+.category.selected,.category:hover{border-color:var(--purple);background:#8b5cf622}
+.category .emoji{display:block;font-size:28px;margin-bottom:12px}
+.category strong{display:block;margin-bottom:7px}
+.category small{color:var(--muted);line-height:1.5}
+.category .tick{position:absolute;right:12px;top:12px;color:var(--cyan)}
+.game-nav{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0 15px}
+.menu-popup{display:none;gap:8px;flex-wrap:wrap;padding:12px;margin-bottom:15px;background:#1b2240;border:1px solid var(--line);border-radius:14px}
+.menu-popup.open{display:flex}
+.panel{padding:23px;border:1px solid var(--line);background:#10162aee;border-radius:22px}
+.topline{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.muted{font-size:13px;color:var(--muted)}
+.timer{font-weight:850;color:var(--cyan)}
+.timer.danger{color:#ff718b}
+.progress{height:6px;border-radius:20px;background:#ffffff12;overflow:hidden;margin:17px 0}
+.progress div{height:100%;width:0;background:linear-gradient(90deg,var(--purple),var(--pink),var(--cyan));transition:width .3s}
+.question{font-size:clamp(21px,3vw,30px);line-height:1.4;margin:23px 0}
+.answers{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.answer{background:#ffffff05;border:1px solid var(--line);color:white;text-align:left;padding:14px;border-radius:13px;min-height:60px}
+.letter{display:inline-grid;place-items:center;background:#252c49;border-radius:8px;width:29px;height:29px;margin-right:9px;font-weight:850}
+.answer.correct{border-color:var(--green);background:#39e6a418}
+.answer.wrong{border-color:#ff718b;background:#ff718b12}
+.answer.correct .letter{background:var(--green);color:#06251a}
+.feedback{display:none;margin-top:15px;padding:14px;border-radius:12px;background:#ffffff08;color:#d8e2ff;line-height:1.65;font-size:13px}
+.feedback.show{display:block}
+.game-footer{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:20px;flex-wrap:wrap}
+.results{text-align:center;padding:35px 20px}
+.bigscore{font-size:54px;color:var(--gold);font-weight:950;margin:15px}
+.result-grid{display:flex;justify-content:center;gap:35px;flex-wrap:wrap;margin:25px 0}
+.result-grid strong{font-size:22px;display:block}
+.result-grid span{color:var(--muted);font-size:12px}
+.modal{display:none;position:fixed;inset:0;z-index:20;background:#050713df;align-items:center;justify-content:center;padding:18px}
+.modal.open{display:flex}
+.modal-card{position:relative;width:min(430px,100%);padding:25px;text-align:center;border:1px solid #65529d;border-radius:22px;background:#12172c;box-shadow:0 20px 80px #0008}
+.close{position:absolute;right:14px;top:12px;background:transparent;border:0;color:white;font-size:20px}
+.modal input{width:100%;padding:12px;margin:10px 0;border:1px solid var(--line);background:#080d20;color:white;border-radius:10px}
+.avatar-options{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:15px 0}
+.avatar-options button{font-size:25px;padding:8px;border:1px solid var(--line);border-radius:12px;background:#202746;color:white}
+footer{text-align:center;color:#707d9e;font-size:11px;padding:35px 0 15px}
+@media(max-width:700px){
+ .container{padding:14px}.hero{grid-template-columns:1fr;padding-top:30px}
+ .art{min-height:190px}.categories{grid-template-columns:1fr 1fr}
+ .stats{gap:7px}.stat{padding:10px}.stat strong{font-size:20px}
+ .answers{grid-template-columns:1fr}.panel{padding:16px}
+}
+@media(max-width:420px){.categories{grid-template-columns:1fr}.mascot{font-size:35px}.brand{font-size:21px}}
+</style>
+</head>
+<body>
+<div class="container">
+<nav>
+ <div class="brand">✦ Design<span>IQ</span><small>CREATIVE SKILLS ARENA</small></div>
+ <div class="nav-actions">
+  <button class="pill" onclick="goHome()">🏠 Home</button>
+  <button class="pill" onclick="openProfile()">👤 Profile</button>
+  <button class="pill" id="navBest">🏆 Best: 0</button>
+ </div>
+</nav>
+
+<section id="home" class="screen active">
+ <div class="hero">
+  <div>
+   <div class="eyebrow">✦ THE DESIGNER'S CHALLENGE</div>
+   <h1>Think. Design.<br><span class="gradient">Play like a pro.</span></h1>
+   <p>Master Photoshop, Illustrator, design fundamentals, AI tools and animation with quick-fire creative challenges.</p>
+   <button class="primary gold" onclick="startGame(true)">▶ PLAY NOW</button>
+   <button class="secondary" onclick="showCategories()">🎨 Categories</button>
+  </div>
+  <div class="art"><div class="orbit"><div class="gem">✦</div></div></div>
+ </div>
+
+ <div class="dashboard">
+  <div class="profile-row">
+   <div class="avatar" id="avatar">😎</div>
+   <div><h3 id="playerName">Creative Designer</h3><p>Level <span id="level">1</span> · Design Explorer</p></div>
+   <button class="secondary" onclick="openProfile()">✏️ Edit</button>
+  </div>
+  <div class="mascot-row">
+   <div class="mascot">👾</div>
+   <div style="flex:1"><h2>Ready to create?</h2><p>Your next creative adventure awaits!</p><button class="primary" onclick="startGame(true)">🚀 Let's Play</button></div>
+   <div class="mascot">🎨</div>
+  </div>
+  <div class="dashboard-stats">
+   <div class="mini-stat">🏆<strong id="dashBest">0</strong><small>Best score</small></div>
+   <div class="mini-stat">⭐<strong id="dashXP">0</strong><small>Total XP</small></div>
+   <div class="mini-stat">🔥<strong id="dashRounds">0</strong><small>Rounds played</small></div>
+  </div>
+ </div>
+
+ <div class="stats">
+  <div class="stat"><strong>50</strong><small>Practice questions</small></div>
+  <div class="stat"><strong>05</strong><small>Creative categories</small></div>
+  <div class="stat"><strong>15s</strong><small>Per question</small></div>
+ </div>
+ <h2 class="section-title" id="categoryHeading">Choose your creative arena</h2>
+ <p>Select a category or try the mixed challenge.</p>
+ <div class="categories" id="categories"></div>
+</section>
+
+<section id="quiz" class="screen">
+ <div class="game-nav">
+  <button class="secondary" onclick="goHome()">← Back</button>
+  <button class="secondary" onclick="toggleMenu()">☰ Menu</button>
+  <button class="secondary" onclick="openProfile()">👤 Profile</button>
+  <button class="secondary" onclick="confirmRestart()">↻ Restart</button>
+ </div>
+ <div id="menuPopup" class="menu-popup">
+  <button class="secondary" onclick="goHome()">🏠 Dashboard</button>
+  <button class="secondary" onclick="showCategories()">🎨 Categories</button>
+  <button class="secondary" onclick="openProfile()">👤 My Profile</button>
+  <button class="secondary" onclick="toggleMenu()">✖ Close</button>
+ </div>
+ <div class="panel">
+  <div class="topline">
+   <div><strong id="categoryLabel">PHOTOSHOP</strong><div class="muted" id="questionCount">Question 1 of 10</div></div>
+   <div class="timer" id="timer">⏱ 15s</div>
+  </div>
+  <div class="progress"><div id="bar"></div></div>
+  <div class="muted" id="qnum">QUESTION 01</div>
+  <h2 class="question" id="question"></h2>
+  <div class="answers" id="answers"></div>
+  <div class="feedback" id="feedback"></div>
+  <div class="game-footer">
+   <span class="muted" id="liveScore">⭐ Score: 0</span>
+   <button class="primary" id="next" disabled>Next question →</button>
+  </div>
+ </div>
+</section>
+
+<section id="results" class="screen">
+ <div class="panel results">
+  <div style="font-size:55px" id="resultEmoji">🏆</div>
+  <h1 style="font-size:38px" id="resultTitle">Challenge complete!</h1>
+  <p id="resultText">Your creative results are ready.</p>
+  <div class="bigscore" id="finalScore">0</div>
+  <div class="muted">TOTAL POINTS</div>
+  <div class="result-grid">
+   <div><strong id="correctCount">0/10</strong><span>Correct answers</span></div>
+   <div><strong id="accuracy">0%</strong><span>Accuracy</span></div>
+   <div><strong id="xpEarned">0</strong><span>XP earned</span></div>
+  </div>
+  <button class="primary" onclick="startGame(false)">↻ Play again</button>
+  <button class="secondary" onclick="goHome()">🏠 Home</button>
+ </div>
+</section>
+
+<footer>DESIGNIQ · CREATE MORE · LEARN EVERY DAY ✦</footer>
+</div>
+
+<div class="modal" id="profileModal">
+ <div class="modal-card">
+  <button class="close" onclick="closeProfile()">✕</button>
+  <h2>✨ Your Creative Profile</h2>
+  <div class="avatar" id="previewAvatar" style="width:90px;height:90px;font-size:48px;margin:20px auto">😎</div>
+  <label for="nameInput">Your name</label>
+  <input id="nameInput" maxlength="24" placeholder="Enter your name">
+  <p>Choose your avatar</p>
+  <div class="avatar-options">
+   <button onclick="selectAvatar('😎')">😎</button>
+   <button onclick="selectAvatar('🤩')">🤩</button>
+   <button onclick="selectAvatar('👾')">👾</button>
+   <button onclick="selectAvatar('🦊')">🦊</button>
+   <button onclick="selectAvatar('🐸')">🐸</button>
+   <button onclick="selectAvatar('🐼')">🐼</button>
+   <button onclick="selectAvatar('🦄')">🦄</button>
+   <button onclick="selectAvatar('🤖')">🤖</button>
+  </div>
+  <button class="primary" onclick="saveProfile()">Save profile ✓</button>
+ </div>
+</div>
+
+<script>
+const bank={
+"Photoshop":[
+["Which feature hides or reveals parts of a layer without deleting pixels?",["Layer Mask","Crop Tool","Smudge Tool","Color Sampler"],0,"Black hides, white reveals and gray partially reveals a layer through its mask."],
+["Which format preserves editable Photoshop layers?",["JPG","PSD","GIF","BMP"],1,"PSD is Photoshop's native layered project format."],
+["What does a clipping mask do?",["Adds a watermark","Uses the layer below to constrain the layer above","Sharpens all layers","Converts pixels to vectors"],1,"The base layer controls where the clipped layer is visible."],
+["Which tool selects areas by similar color?",["Hand Tool","Dodge Tool","Magic Wand","Path Selection"],2,"The Magic Wand selects pixels with similar color values."],
+["What is a benefit of Smart Objects?",["Automatic animation","Non-destructive transformations and filters","Flattening layers","Text-only editing"],1,"Smart Objects preserve source content for flexible editing."],
+["Which color mode is commonly used for process printing?",["RGB","HSB","CMYK","Indexed"],2,"CMYK is commonly used in print; follow your printer's color profile."],
+["What does Ctrl/Cmd + J commonly do?",["Duplicate a layer or selected pixels","Save for web","Merge all layers","Open Camera Raw"],0,"It duplicates a selected layer or copies selected pixels to a new layer."],
+["Which option supports editable tonal adjustments?",["Paint Bucket","Adjustment Layer","Eraser","Flatten Image"],1,"Adjustment layers let you revise tonal and color changes later."],
+["Which tool helps retouch imperfections by blending sampled texture?",["Healing Brush","Pen Tool","Gradient Tool","Artboard Tool"],0,"Healing tools blend sampled texture with surrounding tones."],
+["What helps align and distribute objects evenly?",["Alignment controls","Liquify","Lens Flare","History Brush"],0,"Alignment controls make placement and spacing more consistent."]
+],
+"Illustrator":[
+["What is the key benefit of vector artwork?",["It is always photographic","It scales without pixelation","It contains no shapes","It cannot be printed"],1,"Vectors use paths rather than a fixed pixel grid."],
+["Which tool creates Bézier paths?",["Pen Tool","Eraser","Artboard Tool","Mesh Tool"],0,"The Pen Tool creates anchor points and curves."],
+["What does Pathfinder help you do?",["Edit audio","Combine or subtract shapes","Correct spelling","Export video"],1,"Pathfinder operations alter overlapping vector shapes."],
+["Which is Illustrator's native editable format?",["AI","JPG","MP3","TXT"],0,"AI is Illustrator's native document format."],
+["What is an artboard?",["A brush texture","A defined design canvas","A color profile","A font family"],1,"Artboards define separate design areas in a document."],
+["Which tool edits individual anchor points?",["Direct Selection","Gradient","Eyedropper","Rotate View"],0,"Direct Selection edits points and path segments."],
+["What does Shape Builder do?",["Creates video","Combines or removes shape regions","Adds audio","Compresses PDF"],1,"It lets you interactively merge or remove overlapping regions."],
+["Why outline text before final logo delivery?",["To animate text","To avoid font substitution","To add colors","To create a photo"],1,"Outlined type becomes vector shapes; keep an editable text copy too."],
+["Which format works well for scalable web icons?",["SVG","WAV","MP3","DOCX"],0,"SVG is a widely supported vector format for the web."],
+["What does the Appearance panel manage?",["Multiple fills, strokes and effects","Web browsing","Screen brightness","Audio recording"],0,"It manages editable appearances on Illustrator objects."]
+],
+"Design Fundamentals":[
+["What does visual hierarchy control?",["What viewers notice first","File size","Rasterization","Layer locking"],0,"Size, contrast, position and typography guide attention."],
+["What improves text readability?",["Low contrast","Text blending into background","Adequate contrast","Many neon colors"],2,"Sufficient contrast helps readability and accessibility."],
+["What is kerning?",["Spacing between letter pairs","Paragraph spacing only","A photo filter","A vector mask"],0,"Kerning adjusts spacing between specific pairs of letters."],
+["What does the rule of thirds help with?",["Composition","File compression","Font licensing","Color conversion"],0,"A 3×3 grid can help position key elements."],
+["What is negative space?",["A mistake","Empty space around and between elements","Only black backgrounds","An inverted image"],1,"Negative space gives elements breathing room."],
+["Complementary colors are located where?",["Next to each other","Opposite on the color wheel","Always identical","Only black and white"],1,"Opposite colors often create strong contrast."],
+["Why use a consistent spacing system?",["Make everything identical","Create rhythm and cohesion","Remove whitespace","Reduce readability"],1,"A spacing scale creates more intentional layouts."],
+["What is best for small interface labels?",["Tiny ornate lettering","Legible type at an adequate size","Decorative script always","Text at 5px"],1,"Interface text must remain readable at its actual size."],
+["What does a layout grid help achieve?",["Consistent alignment","Photo retouching","Random colors","3D models"],0,"Grids help organize content and alignment."],
+["Why create a mood board?",["Set visual direction and collect references","Export code","Proofread text","Remove backgrounds"],0,"Mood boards establish a shared visual direction."]
+],
+"AI Design Tools":[
+["What is a prompt in generative AI?",["Instructions describing desired output","A monitor type","Compression setting","A cable"],0,"Prompts describe the subject, style, composition and constraints."],
+["Which prompt is generally more useful?",["Only 'good'","Specific subject, lighting, composition and style","No subject","Unrelated keywords"],1,"Specific details give the model clearer creative direction."],
+["What is generative fill used for?",["Generate or replace selected image areas","Change monitor refresh rate","Only write formulas","Print documents"],0,"Generative fill can extend, add or replace image content."],
+["Before commercial use of AI assets, check:",["Only brightness","Tool terms, licensing and brand rules","Nothing","Only filenames"],1,"Usage rights vary between tools and contexts."],
+["What does an AI upscaler do?",["Estimates a higher-resolution image","Creates email accounts","Guarantees perfect color","Guarantees correct text"],0,"Upscaling estimates extra pixels; inspect for artifacts."],
+["Which tool is used for collaborative interface design?",["Figma","Calculator","Notepad","File Explorer"],0,"Figma is a collaborative interface design and prototyping platform."],
+["Why proofread AI-generated text?",["It is always perfect","It may contain errors or distorted lettering","Text never matters","It cannot be edited"],1,"Proofread important text and add final typography in a design tool."],
+["Which workflow is most reliable?",["Publish first output","Generate, curate, refine and review","Skip human review","Use random assets"],1,"Human art direction and quality checks remain important."],
+["AI background removal estimates:",["Foreground and background regions","Salary","Domain names","Font licenses"],0,"Fine edges such as hair may still need manual cleanup."],
+["A key limitation of AI image generation is:",["It always follows instructions","Inconsistent details and artifacts","It cannot create images","It only makes vectors"],1,"Review generated visuals carefully before delivery."]
+],
+"Animation & Motion Graphics":[
+["What is a keyframe?",["A saved property value at a specific time","An image format","A font","An audio cable"],0,"Keyframes define property values such as position, scale or opacity over time."],
+["What does easing do in animation?",["Changes motion speed over time","Deletes all frames","Converts video to print","Changes the filename"],0,"Easing creates smoother acceleration and deceleration."],
+["What does the Graph Editor help control in After Effects?",["Animation speed and value curves","Email settings","Font licenses","Printer ink"],0,"The Graph Editor gives detailed control over animated property curves."],
+["What is a pre-composition?",["Layers grouped into a nested composition","A color profile","A sound effect","A still-image format"],0,"Pre-comps organize layers into reusable nested compositions."],
+["What does motion tracking do?",["Tracks movement in footage","Draws only vectors","Removes all keyframes","Compresses audio"],0,"Tracking estimates movement so graphics can follow footage."],
+["What is a seamless loop?",["Animation that repeats without a visible jump","A still image","A one-time transition","A file folder"],0,"The ending should transition smoothly into the beginning."],
+["What does FPS mean?",["Frames per second","File pixels standard","Focus point scale","Final print size"],0,"FPS measures how many frames display each second."],
+["What is rigging in 3D animation?",["Building controls for a character or object","Color correction","Exporting a JPG","Adding subtitles"],0,"Rigging creates a controllable skeleton or system for animation."],
+["Which software supports 3D modeling and animation?",["Blender","Excel","Notepad","Lightroom only"],0,"Blender supports modeling, rigging, animation and rendering."],
+["What should you check when exporting an animated GIF?",["Loop, dimensions, frame timing and file size","Only filename","Only monitor size","Font family only"],0,"These settings affect playback quality, smoothness and file weight."]
+]
+};
+
+const icons={
+"Photoshop":"🖼️","Illustrator":"✒️","Design Fundamentals":"🎨",
+"AI Design Tools":"🤖","Animation & Motion Graphics":"🎬"
+};
+const descriptions={
+"Photoshop":"Layers · Masks · Retouching",
+"Illustrator":"Vectors · Paths · Logos",
+"Design Fundamentals":"Color · Typography · Layout",
+"AI Design Tools":"Prompts · Generative AI",
+"Animation & Motion Graphics":"After Effects · GIF · 3D"
+};
+
+const $=id=>document.getElementById(id);
+let selected="Photoshop",questions=[],index=0,score=0,correct=0;
+let seconds=15,interval=null,answered=false,mixedRound=false;
+let chosenAvatar=localStorage.getItem("diAvatar")||"😎";
+
+function getNum(key){return Number(localStorage.getItem(key)||0)}
+function getBest(){return getNum("diBest")}
+function updateBest(){
+ $("navBest").textContent="🏆 Best: "+getBest();
+ $("dashBest").textContent=getBest();
+}
+function refreshDashboard(){
+ $("playerName").textContent=localStorage.getItem("diName")||"Creative Designer";
+ $("avatar").textContent=chosenAvatar;
+ $("dashXP").textContent=getNum("diXP");
+ $("dashRounds").textContent=getNum("diRounds");
+ $("level").textContent=Math.floor(getNum("diXP")/500)+1;
+ updateBest();
+}
+function showScreen(name){
+ document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+ $(name).classList.add("active");
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+function buildCategories(){
+ const root=$("categories");root.innerHTML="";
+ Object.keys(bank).forEach(name=>{
+  const b=document.createElement("button");
+  b.className="category"+(selected===name?" selected":"");
+  b.innerHTML='<span class="tick">'+(selected===name?"✓":"")+'</span>'+
+   '<span class="emoji">'+icons[name]+'</span><strong>'+name+'</strong>'+
+   '<small>'+descriptions[name]+'</small><br><small>10 questions · Play →</small>';
+  b.onclick=()=>{selected=name;buildCategories();startGame(false)};
+  root.appendChild(b);
+ });
+}
+function startGame(mix){
+ clearInterval(interval);
+ mixedRound=Boolean(mix);
+ let pool=mixedRound?
+  Object.entries(bank).flatMap(([category,qs])=>qs.map(q=>({category,q}))):
+  bank[selected].map(q=>({category:selected,q}));
+ questions=pool.slice().sort(()=>Math.random()-.5).slice(0,10);
+ index=0;score=0;correct=0;
+ $("menuPopup").classList.remove("open");
+ showScreen("quiz");renderQuestion();
+}
+function renderQuestion(){
+ clearInterval(interval);answered=false;seconds=15;
+ const item=questions[index],q=item.q;
+ $("categoryLabel").textContent=icons[item.category]+" "+item.category.toUpperCase();
+ $("questionCount").textContent="Question "+(index+1)+" of "+questions.length;
+ $("qnum").textContent="QUESTION "+String(index+1).padStart(2,"0");
+ $("question").textContent=q[0];
+ $("bar").style.width=(index/questions.length*100)+"%";
+ $("timer").textContent="⏱ "+seconds+"s";
+ $("timer").classList.remove("danger");
+ $("feedback").className="feedback";$("feedback").textContent="";
+ $("next").disabled=true;
+ $("next").textContent=index===questions.length-1?"See results →":"Next question →";
+ $("liveScore").textContent="⭐ Score: "+score;
+ const root=$("answers");root.innerHTML="";
+ q[1].forEach((answer,i)=>{
+  const b=document.createElement("button");b.className="answer";
+  const letter=document.createElement("span");
+  letter.className="letter";letter.textContent=String.fromCharCode(65+i);
+  b.append(letter,document.createTextNode(answer));
+  b.onclick=()=>choose(i);root.appendChild(b);
+ });
+ interval=setInterval(()=>{
+  seconds--;
+  $("timer").textContent="⏱ "+seconds+"s";
+  if(seconds<=5)$("timer").classList.add("danger");
+  if(seconds<=0)choose(-1);
+ },1000);
+}
+function choose(choice){
+ if(answered)return;
+ answered=true;clearInterval(interval);
+ const q=questions[index].q;
+ const buttons=[...document.querySelectorAll(".answer")];
+ buttons.forEach((b,i)=>{
+  b.disabled=true;
+  if(i===q[2])b.classList.add("correct");
+ });
+ if(choice===q[2]){correct++;score+=100+seconds*5}
+ else if(choice>=0)buttons[choice].classList.add("wrong");
+ const heading=choice===q[2]?"Correct! ✨":choice===-1?"Time's up! ⏱":"Good try! 💡";
+ $("feedback").replaceChildren();
+ const strong=document.createElement("strong");strong.textContent=heading+" ";
+ $("feedback").append(strong,document.createTextNode(q[3]));
+ $("feedback").classList.add("show");
+ $("liveScore").textContent="⭐ Score: "+score;
+ $("bar").style.width=((index+1)/questions.length*100)+"%";
+ $("next").disabled=false;
+}
+$("next").onclick=()=>{
+ if(!answered)return;
+ if(index<questions.length-1){index++;renderQuestion()}
+ else finishGame();
+};
+function finishGame(){
+ clearInterval(interval);showScreen("results");
+ const pct=Math.round(correct/questions.length*100);
+ $("finalScore").textContent=score;
+ $("correctCount").textContent=correct+"/"+questions.length;
+ $("accuracy").textContent=pct+"%";
+ const earned=Math.round(score/10);
+ $("xpEarned").textContent=earned;
+ $("resultEmoji").textContent=pct>=80?"🏆":pct>=50?"🚀":"🎨";
+ $("resultTitle").textContent=pct>=80?"Creative genius!":pct>=50?"Great progress!":"Keep creating!";
+ $("resultText").textContent=pct>=80?"Outstanding work. Your design knowledge is sharp!":
+  pct>=50?"Nice work! Review the explanations and keep improving.":
+  "Every designer starts somewhere. Try another round and level up!";
+ if(score>getBest())localStorage.setItem("diBest",score);
+ localStorage.setItem("diXP",getNum("diXP")+earned);
+ localStorage.setItem("diRounds",getNum("diRounds")+1);
+ refreshDashboard();
+}
+function goHome(){
+ clearInterval(interval);$("menuPopup").classList.remove("open");
+ showScreen("home");refreshDashboard();
+}
+function showCategories(){
+ goHome();
+ setTimeout(()=>$("categoryHeading").scrollIntoView({behavior:"smooth",block:"start"}),100);
+}
+function toggleMenu(){$("menuPopup").classList.toggle("open")}
+function confirmRestart(){
+ if(confirm("Restart this round? Your current round progress will be lost.")){
+  startGame(mixedRound);
+ }
+}
+function openProfile(){
+ $("nameInput").value=localStorage.getItem("diName")||"Creative Designer";
+ $("previewAvatar").textContent=chosenAvatar;
+ $("profileModal").classList.add("open");
+}
+function closeProfile(){$("profileModal").classList.remove("open")}
+function selectAvatar(emoji){
+ chosenAvatar=emoji;$("previewAvatar").textContent=emoji;
+}
+function saveProfile(){
+ const name=$("nameInput").value.trim()||"Creative Designer";
+ localStorage.setItem("diName",name);
+ localStorage.setItem("diAvatar",chosenAvatar);
+ closeProfile();refreshDashboard();
+}
+$("profileModal").addEventListener("click",e=>{
+ if(e.target===$("profileModal"))closeProfile();
+});
+document.addEventListener("keydown",e=>{
+ if(e.key==="Escape"){closeProfile();$("menuPopup").classList.remove("open")}
+ if(!$("quiz").classList.contains("active")||answered)return;
+ if(["1","2","3","4"].includes(e.key)){
+  const b=document.querySelectorAll(".answer")[Number(e.key)-1];
+  if(b)b.click();
+ }
+});
+buildCategories();refreshDashboard();
+</script>
+</body>
+</html>
